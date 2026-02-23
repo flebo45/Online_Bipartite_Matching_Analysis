@@ -1,0 +1,9 @@
+{
+    "experiment_name": "Structure Test",
+    "experiment_type": "test",
+    "algorithm": "greedy",
+    "n": 100,
+    "density": "extremely_sparse",
+    "order": "random",
+    "trials": 1
+}

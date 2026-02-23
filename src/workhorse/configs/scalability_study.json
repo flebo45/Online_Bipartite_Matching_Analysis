@@ -1,0 +1,9 @@
+{
+    "experiment_name": "Scalability Study",
+    "experiment_type": "scalability",
+    "n_list": [1024, 2048, 4096, 8192, 16384, 32768],
+    "densities": ["sparse"],
+    "orders":  ["random"],
+    "algorithms": ["greedy", "ranking", "hopcroft_karp"],
+    "trials": 5
+}

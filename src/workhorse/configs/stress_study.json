@@ -1,0 +1,38 @@
+{
+    "experiment_name": "Stress Test",
+    "experiment_type": "stress_test",
+    "algorithms": ["greedy", "ranking", "hopcroft_karp"],
+    "test_cases": [
+        {
+            "id": "DP-V1",
+            "type": "empty",
+            "n": 10,
+            "expected_size": 0
+        },
+        {
+            "id": "DP-V2",
+            "type": "single_edge",
+            "n": 10,
+            "expected_size": 1
+        },
+        {
+            "id": "DP-V3",
+            "type": "disconnected",
+            "n": 4,
+            "expected_size": 4
+        },
+        {
+            "id": "DP-V4",
+            "type": "complete",
+            "n": 10,
+            "expected_size": 10
+        },
+        {
+            "id": "DP-V5",
+            "type": "z_trap",
+            "n": 10,
+            "expected_greedy": 5,
+            "expected_opt": 10
+        }
+    ]
+}

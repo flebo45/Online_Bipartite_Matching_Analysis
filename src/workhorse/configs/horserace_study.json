@@ -1,0 +1,9 @@
+{
+    "experiment_name": "Robustness Horse Race",
+    "experiment_type": "horse_race",
+    "n_list": [8192],
+    "densities": ["extremely_sparse", "sparse", "medium", "dense"],
+    "orders": ["random", "adversarial"],
+    "algorithms": ["greedy", "ranking", "hopcroft_karp"],
+    "trials": 30
+}

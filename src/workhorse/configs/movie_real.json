@@ -1,0 +1,7 @@
+{
+    "experiment_name": "Real World - MovieLens",
+    "dataset_path": "data/u.data",
+    "algorithms": ["greedy", "ranking", "hopcroft_karp"],
+    "orders": ["real", "random"],
+    "trials": 5
+}

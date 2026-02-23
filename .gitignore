@@ -1,0 +1,4 @@
+.venv
+src/__pycache__/
+src/pilot/__pycache__/
+src/workhorse/src/__pycache__/
