@@ -80,9 +80,8 @@ def analyze_scalability(df):
     plt.grid(True, which="both", ls="--", alpha=0.5)
     
     plt.tight_layout()
-    plt.savefig('scalability_loglog_plot.png', dpi=300)
+    plt.savefig('src/workhorse/analysis_plots/scalability_loglog_plot.png', dpi=300)
     print("\nSaved plot to 'scalability_loglog_plot.png'")
-    plt.show()
 
 def analyze_robustness(df):
     print(f"\nExperiment 2: Robustness Analysis")
@@ -105,9 +104,8 @@ def analyze_robustness(df):
     plt.xlabel('Algorithm', fontsize=14)
     plt.legend(title='Arrival Order', loc='lower right')
     plt.tight_layout()
-    plt.savefig('../../analysis_plots/robustness_boxplot.png', dpi=300)
+    plt.savefig('src/workhorse/analysis_plots/robustness_boxplot.png', dpi=300)
     print("\nSaved plot to 'robustness_boxplot.png'")
-    plt.show()
 
     # Interaction Plot
     g = sns.catplot(
@@ -123,9 +121,8 @@ def analyze_robustness(df):
 
     g.set(ylim=(0.45, 1.05))
     
-    plt.savefig('../../analysis_plots/robustness_interaction_plot.png', dpi=300, bbox_inches='tight')
+    plt.savefig('src/workhorse/analysis_plots/robustness_interaction_plot.png', dpi=300, bbox_inches='tight')
     print("Saved plot to 'robustness_interaction_plot.png'")
-    plt.show()
 
 def analyze_real_world(df):
     print(f"\nExperiment 3: Real-World Performance Analysis")
@@ -169,21 +166,63 @@ def analyze_real_world(df):
                     textcoords = 'offset points')
 
     plt.tight_layout()
-    plt.savefig('../../analysis_plots/realworld_cr_barplot.png', dpi=300)
+    plt.savefig('src/workhorse/analysis_plots/realworld_cr_barplot.png', dpi=300)
     print("\nSaved plot to 'realworld_cr_barplot.png'")
+
+def analyze_stress_test(file_pattern):
+
+    all_files = glob.glob(file_pattern)
+    if not all_files:
+        raise FileNotFoundError(f"No files found matching pattern: {file_pattern}")
+
+    # Load the most recent stress test file
+    latest_file = max(all_files, key=lambda x: x)
+    print(f"Loading latest stress test report: {latest_file}\n")
+    df = pd.read_csv(latest_file)
+
+    print(f"\nExperiment 4: Stress Test Analysis")
+
+    # 1. Quick sanity check: Did anything crash?
+    total_tests = len(df)
+    passed_tests = len(df[df['status'] == 'PASS'])
+    failed_tests = total_tests - passed_tests
     
-    plt.show()
+    print(f"Total Test Executions: {total_tests}")
+    print(f"Passed: {passed_tests}")
+    print(f"Failed/Crashed: {failed_tests}\n")
+    
+    if failed_tests > 0:
+        print("[WARNING] You have failing edge cases! See details below:")
+        display(df[df['status'] != 'PASS'][['id', 'type', 'algorithm', 'status', 'message']])
+        print("\n")
+
+    # 2. Build the Verification Matrix
+    # We want rows to be the Test Cases, and columns to be the Algorithms, showing the Status
+    matrix = df.pivot(index=['id', 'type'], columns='algorithm', values='status')
+    
+    print("Verification Matrix:")
+    print(matrix.to_string())
+    
+    # 3. Show the actual match sizes for the Z-Trap (DP-V5) to prove the adversary worked
+    print("\nDeep Dive: The Z-Trap Adversarial Edge Case (DP-V5)")
+    z_trap_data = df[df['type'] == 'z_trap'][['algorithm', 'match_size', 'expected']]
+    print(z_trap_data.to_string(index=False))
     
 
 
 if __name__ == "__main__":
-    dataset = load_and_clean_data('../../results/Real_World_*.csv')
+    dataset_scalability = load_and_clean_data('src/workhorse/results/Scalability_Study*.csv')
+    print(f"[SCALABILITY]Rows after loading and cleaning: {len(dataset_scalability)}")
 
-    print(f"Rows after loading and cleaning: {len(dataset)}")
+    dataset_robustness = load_and_clean_data('src/workhorse/results/Robustness_Horse_Race*.csv')
+    print(f"[ROBUSTNESS]Rows after loading and cleaning: {len(dataset_robustness)}")
 
-    # 2. Check what unique values actually exist in your CSV
-    if len(dataset) > 0:
-        print("Unique densities found:", dataset['density'].unique())
-        print("Unique orders found:", dataset['order'].unique())
+    dataset_real_world = load_and_clean_data('src/workhorse/results/Real_World_*.csv')
+    print(f"[REAL-WORLD]Rows after loading and cleaning: {len(dataset_real_world)}")
 
-    analyze_real_world(dataset)
+    dataset_stress_test = 'src/workhorse/results/Stress_study_*.csv'
+
+    analyze_scalability(dataset_scalability)
+    analyze_robustness(dataset_robustness)
+    analyze_real_world(dataset_real_world)
+    analyze_stress_test(dataset_stress_test)
