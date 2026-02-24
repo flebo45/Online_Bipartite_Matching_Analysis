@@ -111,19 +111,34 @@ def generate_adversarial_z_trap(n_pairs):
 def generate_adversarial_arrival_order(graph):
     """
     Generate adversarial order for online vertices in every graph.
-    Strategy: Sort online vertices by degree ascending (lowest degree first)
+    Strategy: "Greedy Starvation"
+    - High-deegre vertices arrives First (they consume resources)
+    - Low-degree vertices arrives Last (they get starved)
+    - Tie-breaker: U's connected to high vulnerable V's arrive even earlier
     """
     n_left = graph.n_left
 
+    # Calculate degree of each online vertex
+    v_deegrees = [0] * graph.n_right
+    for u in range(n_left):
+        for v in graph.get_neighbors(u):
+            v_deegrees[v] += 1
+
     scoring = []
     for u in range(n_left):
-        neighbors_list = graph.get_neighbors(u)
-        if neighbors_list:
-            scoring.append((u, len(neighbors_list)))
-        else:
-            scoring.append((u, float('inf')))  # No neighbors, worst case
+        neighbors = graph.get_neighbors(u)
 
-    scoring.sort(key=lambda x: x[1])  # Sort by degree (ascending)
+        if not neighbors:
+            scoring.append((u, -1, float('inf')))  # No neighbors, lowest priority
+            continue
+        
+        u_deg = len(neighbors)
+        min_v_deg = min(v_deegrees[v] for v in neighbors)
+
+        scoring.append((u, u_deg, min_v_deg))
+
+    # Sort by degree (descending), then by min_v_deg (ascending) for tie-breaking
+    scoring.sort(key=lambda x: (-x[1], x[2]))
     return [item[0] for item in scoring]
 
 def generate_arrival_order(graph, order_type):

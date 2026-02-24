@@ -127,9 +127,57 @@ def analyze_robustness(df):
     print("Saved plot to 'robustness_interaction_plot.png'")
     plt.show()
 
+def analyze_real_world(df):
+    print(f"\nExperiment 3: Real-World Performance Analysis")
+
+    # Remove H-K cause it's ratio is always 1
+    df_online = df[df['algorithm'].isin(['greedy', 'ranking'])].copy()
+
+     # Summary Table
+    summary = df_online.groupby(['algorithm','order'])['cr'].agg(
+        ['mean', 'std', 'min', 'max']
+    ).round(4)
+    print("\nCompetitive Ratio Summary by Algorithm and Order:")
+    print(summary.to_string())
+
+    # Bar Chart
+    plt.figure(figsize=(9, 6))
+
+    # bar plot to show average performance diffrences
+    ax = sns.barplot(
+        data=df_online, 
+        x='algorithm', 
+        y='cr', 
+        hue='order', 
+        palette='viridis',
+        capsize=0.05,
+        err_kws={'linewidth': 1.5}
+    )
+
+    plt.title('Real-World Performance', fontsize=16, fontweight='bold')
+    plt.ylabel('Mean Competitive Ratio (ALG / OPT)', fontsize=14)
+    plt.xlabel('Algorithm', fontsize=14)
+
+    plt.ylim(0.5, 1.0)
+    plt.legend(title='Arrival Order', loc='lower right')
+
+    for p in ax.patches:
+        ax.annotate(format(p.get_height(), '.3f'), 
+                    (p.get_x() + p.get_width() / 2., p.get_height()), 
+                    ha = 'center', va = 'center', 
+                    xytext = (0, 9), 
+                    textcoords = 'offset points')
+
+    plt.tight_layout()
+    plt.savefig('../../analysis_plots/realworld_cr_barplot.png', dpi=300)
+    print("\nSaved plot to 'realworld_cr_barplot.png'")
+    
+    plt.show()
+    
+
 
 if __name__ == "__main__":
-    dataset = load_and_clean_data('../../results/Robustness_Horse_Race*.csv')
+    dataset = load_and_clean_data('../../results/Real_World_*.csv')
 
     print(f"Rows after loading and cleaning: {len(dataset)}")
 
@@ -138,4 +186,4 @@ if __name__ == "__main__":
         print("Unique densities found:", dataset['density'].unique())
         print("Unique orders found:", dataset['order'].unique())
 
-    analyze_robustness(dataset)
+    analyze_real_world(dataset)
