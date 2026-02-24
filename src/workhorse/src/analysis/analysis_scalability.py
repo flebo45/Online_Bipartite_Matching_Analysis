@@ -84,8 +84,52 @@ def analyze_scalability(df):
     print("\nSaved plot to 'scalability_loglog_plot.png'")
     plt.show()
 
+def analyze_robustness(df):
+    print(f"\nExperiment 2: Robustness Analysis")
+
+    # Remove H-K cause it's ratio is always 1
+    df_online = df[df['algorithm'].isin(['greedy', 'ranking'])].copy()
+
+     # Summary Table
+    summary = df_online.groupby(['algorithm', 'density', 'order'])['cr'].agg(
+        ['mean', 'std', 'min', 'max']
+    ).round(3)
+    print("\nCompetitive Ratio Summary by Algorithm, Density, and Order:")
+    print(summary.to_string())
+
+    # Boxplot
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(data=df_online, x='algorithm', y='cr', hue='order', palette='Set2')
+    plt.title('Distribution of Competitive Ratios by Arrival Order', fontsize=16, fontweight='bold')
+    plt.ylabel('Competitive Ratio (ALG / OPT)', fontsize=14)
+    plt.xlabel('Algorithm', fontsize=14)
+    plt.legend(title='Arrival Order', loc='lower right')
+    plt.tight_layout()
+    plt.savefig('../../analysis_plots/robustness_boxplot.png', dpi=300)
+    print("\nSaved plot to 'robustness_boxplot.png'")
+    plt.show()
+
+    # Interaction Plot
+    g = sns.catplot(
+        data=df_online,
+        x='density', y='cr', hue='order', col='algorithm',
+        kind='point', markers=['o', 's'], linestyles=['-', '--'],
+        palette='Dark2', height=5, aspect=1.2, errorbar='sd'
+    )
+
+    g.fig.suptitle('Factorial Interaction Effects: Density vs. Arrival Order', fontsize=16, fontweight='bold', y=1.05)
+    g.set_axis_labels("Graph Density", "Mean Competitive Ratio")
+    g.set_titles("Algorithm: {col_name}")
+
+    g.set(ylim=(0.45, 1.05))
+    
+    plt.savefig('../../analysis_plots/robustness_interaction_plot.png', dpi=300, bbox_inches='tight')
+    print("Saved plot to 'robustness_interaction_plot.png'")
+    plt.show()
+
+
 if __name__ == "__main__":
-    dataset = load_and_clean_data('../../results/Scalability_Study_*.csv')
+    dataset = load_and_clean_data('../../results/Robustness_Horse_Race*.csv')
 
     print(f"Rows after loading and cleaning: {len(dataset)}")
 
@@ -94,4 +138,4 @@ if __name__ == "__main__":
         print("Unique densities found:", dataset['density'].unique())
         print("Unique orders found:", dataset['order'].unique())
 
-    analyze_scalability(dataset)
+    analyze_robustness(dataset)
