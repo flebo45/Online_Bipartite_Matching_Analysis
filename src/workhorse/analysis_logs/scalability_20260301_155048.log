@@ -1,0 +1,34 @@
+Loading file(s) matching pattern: results/Scalability_Study*.csv
+Files loaded:
+- results/Scalability_Study_20260215_115852.csv
+- results/Scalability_Study_20260301_144735.csv
+Total valid rows after cleaning: 180
+
+
+Experiment 1: Scalability Analysis
+
+Mean Execution Time (ms):
+algorithm  greedy  hopcroft_karp  ranking
+n                                        
+1024         0.20          12.08     0.49
+2048         0.42          28.92     1.12
+4096         0.89          60.23     2.56
+8192         1.81         124.86     6.54
+16384        4.40         288.33    14.30
+32768       15.06         658.27    38.33
+
+Doubling Ratios:
+algorithm  greedy  hopcroft_karp  ranking
+n                                        
+2048         2.07           2.40     2.27
+4096         2.13           2.08     2.28
+8192         2.02           2.07     2.56
+16384        2.44           2.31     2.18
+32768        3.42           2.28     2.68
+
+Expectations:
+- Greedy: O(E) -> Doubling ratio ~2
+- Hopcroft-Karp: O(E * sqrt(V)) -> Doubling ratio ~2 * sqrt(2) ≈ 2.83
+- Ranking: O(E) -> Doubling ratio ~2
+
+Saved plot to 'scalability_loglog_plot_20260301_155048.pdf'

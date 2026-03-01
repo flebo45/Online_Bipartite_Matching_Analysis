@@ -1,0 +1,21 @@
+Loading latest stress test report: results/Stress_study_20260215_112628.csv
+
+Experiment 4: Stress Test Analysis
+Total Test Executions: 15
+Passed: 15
+Failed/Crashed: 0
+
+Verification Matrix:
+algorithm          greedy hopcroft_karp ranking
+id    type                                     
+DP-V1 empty          PASS          PASS    PASS
+DP-V2 single_edge    PASS          PASS    PASS
+DP-V3 disconnected   PASS          PASS    PASS
+DP-V4 complete       PASS          PASS    PASS
+DP-V5 z_trap         PASS          PASS    PASS
+
+Deep Dive: The Z-Trap Adversarial Edge Case (DP-V5)
+    algorithm  match_size  expected
+       greedy           5       5.0
+      ranking           7       NaN
+hopcroft_karp          10      10.0

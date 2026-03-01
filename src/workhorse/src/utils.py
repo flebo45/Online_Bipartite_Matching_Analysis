@@ -17,6 +17,7 @@ def load_config():
     parser.add_argument("--n", type=int, help="Override input size N")
     parser.add_argument("--trials", type=int, help="Override number of trials")
     parser.add_argument("--seed", type=int, help="Fixed seed for reproducibility")
+    parser.add_argument("--densities", type=str, help="Comma-separated list of densities (e.g., 'sparse, medium, dense')")
 
     args = parser.parse_args()
 
@@ -35,6 +36,8 @@ def load_config():
         config['n_list'] = [args.n]
     if args.trials:
         config['trials'] = args.trials
+    if args.densities:
+        config['densities'] = [d.strip() for d in args.densities.split(',')]
     if args.seed is not None:
         config['fixed_seed'] = args.seed
         config['trials'] = 1  # If a fixed seed is provided, we only need one trial
