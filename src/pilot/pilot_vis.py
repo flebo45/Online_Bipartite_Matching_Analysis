@@ -7,11 +7,11 @@ from BipartitePilot import BipartitePilot
 
 def run_mini_horse_race():
     # Parameters
-    n_pairs = 25
+    n_pairs = 4096
     trials_ranking = 50
 
     # Graphs Generation
-    random_graph = generate_random_bipartite(n_pairs, 0.1)
+    random_graph = generate_random_bipartite(n_pairs, 1) 
     z_graph = generate_z_graph(n_pairs)
 
     datsets = {"Random Graph": random_graph, "Z-Graph": z_graph}

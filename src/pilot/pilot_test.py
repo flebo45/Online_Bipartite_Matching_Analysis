@@ -33,7 +33,7 @@ def run_smoke_test():
 
 def run_horse_race_pilot():
     print("Running horse race pilot test...")
-    n_pairs = 10
+    n_pairs = 4096
     graph = generate_z_graph(n_pairs)
 
     # Optimal Matching
@@ -86,4 +86,4 @@ def valide_hk_implementation():
     print(f"Pilot HK Size: {size}")
 
 if __name__ == "__main__":
-    valide_hk_implementation()
+    run_horse_race_pilot()

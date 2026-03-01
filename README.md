@@ -156,7 +156,7 @@ Tests algorithmic complexity by doubling input size $N \in \{1024, 2048, ..., 32
 - Ranking: $\approx 2.0$ (linear)
 
 ```bash
-python main.py --config ../configs/scalability_study.json
+python src/main.py --config ../configs/scalability_study.json
 ```
 
 ### 2. Robustness Study (Factorial Design)
@@ -167,7 +167,7 @@ Full factorial experiment crossing:
 - **Arrival Order**: `random`, `adversarial` (greedy starvation heuristic)
 
 ```bash
-python main.py --config ../configs/horserace_study.json
+python src/main.py --config ../configs/horserace_study.json
 ```
 
 ### 3. Real-World Analysis
@@ -179,7 +179,7 @@ Evaluates algorithms on the **MovieLens 100K** dataset:
 - Edges represent ratings $\geq 4.0$
 
 ```bash
-python main.py --config ../configs/movie_real.json
+python src/main.py --config ../configs/movie_real.json
 ```
 
 ### 4. Stress Testing
@@ -192,7 +192,7 @@ Deterministic verification on edge cases:
 - Adversarial Z-trap structures
 
 ```bash
-python main.py --config ../configs/stress_study.json
+python src/main.py --config ../configs/stress_study.json
 ```
 
 ---
@@ -221,6 +221,8 @@ OnlineBipartiteMatching/
         │   └── test_config.json
         │
         ├── data/                       # Dataset storage (e.g., MovieLens)
+        |
+        ├── analysis_logs/                       # Experiment logs with timestamps
         │
         ├── results/                    # CSV output from experiments
         │   ├── Scalability_Study_*.csv
@@ -248,18 +250,17 @@ OnlineBipartiteMatching/
 After running experiments, generate visualizations using the analysis module:
 
 ```bash
-cd src/workhorse/src
-python analysis.py
+python src/analysis.py
 ```
 
 ### Generated Plots
 
-| Plot                              | Description                          |
-| --------------------------------- | ------------------------------------ |
-| `scalability_loglog_plot.png`     | Log-log time complexity verification |
-| `robustness_boxplot.png`          | CR distribution by arrival order     |
-| `robustness_interaction_plot.png` | Factorial interaction effects        |
-| `realworld_cr_barplot.png`        | MovieLens performance comparison     |
+| Plot                                | Description                          |
+| ----------------------------------- | ------------------------------------ |
+| `scalability_loglog_plot_*.pdf`     | Log-log time complexity verification |
+| `robustness_boxplot_*.pdf`          | CR distribution by arrival order     |
+| `robustness_interaction_plot_*.pdf` | Factorial interaction effects        |
+| `realworld_cr_barplot_*.pdf`        | MovieLens performance comparison     |
 
 ## References
 
