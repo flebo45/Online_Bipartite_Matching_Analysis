@@ -106,7 +106,7 @@ networkx>=2.6.0  # For pilot phase validation
 cd src/workhorse
 
 # Run an experiment with a configuration file
-python src/main.py --config /configs/scalability_study.json
+python -OO src/main.py --config configs/scalability_study.json
 ```
 
 ### Command-Line Interface
@@ -136,7 +136,7 @@ python src/main.py --config /configs/scalability_study.json
 ### Reproducible Single Run
 
 ```bash
-python src/main.py --config /configs/test_config.json --seed 42
+python -OO src/main.py --config configs/test_config.json --seed 42
 ```
 
 ---
@@ -156,7 +156,7 @@ Tests algorithmic complexity by doubling input size $N \in \{1024, 2048, ..., 32
 - Ranking: $\approx 2.0$ (linear)
 
 ```bash
-python src/main.py --config ../configs/scalability_study.json
+python -OO src/main.py --config configs/scalability_study.json
 ```
 
 ### 2. Robustness Study (Factorial Design)
@@ -167,7 +167,7 @@ Full factorial experiment crossing:
 - **Arrival Order**: `random`, `adversarial` (greedy starvation heuristic)
 
 ```bash
-python src/main.py --config ../configs/horserace_study.json
+python -OO src/main.py --config configs/horserace_study.json
 ```
 
 ### 3. Real-World Analysis
@@ -179,7 +179,7 @@ Evaluates algorithms on the **MovieLens 100K** dataset:
 - Edges represent ratings $\geq 4.0$
 
 ```bash
-python src/main.py --config ../configs/movie_real.json
+python -OO src/main.py --config configs/movie_real.json
 ```
 
 ### 4. Stress Testing
@@ -192,7 +192,7 @@ Deterministic verification on edge cases:
 - Adversarial Z-trap structures
 
 ```bash
-python src/main.py --config ../configs/stress_study.json
+python -OO src/main.py --config configs/stress_study.json
 ```
 
 ---
